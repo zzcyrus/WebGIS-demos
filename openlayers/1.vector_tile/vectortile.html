@@ -1,58 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>vector-tile-ol</title>
-    <link rel="stylesheet" href="https://openlayers.org/en/v4.4.2/css/ol.css" type="text/css">
-    <script src="https://openlayers.org/en/v4.4.2/build/ol.js"></script>
-</head>
-<body>
-<div id="map" class="map"></div>
-<script>
-
-    var map = new ol.Map({
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v4.6.5/css/ol.css"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v4.6.5/build/ol.js"></script>
+    <style>
+      html,
+      body,
+      #map {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script>
+      var map = new ol.Map({
         layers: [
-            new ol.layer.Tile({
-                source: new ol.source.XYZ({
-                    url: "http://t0.tianditu.com/DataServer?T=ter_w&x={x}&y={y}&l={z}"
-                })
-            })
+          new ol.layer.Tile({
+            source: new ol.source.XYZ({
+              url: 'http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+            }),
+          }),
         ],
         target: 'map',
         view: new ol.View({
-            center: [0, 0],
-            zoom: 3
-        })
-    });
+          center: [0, 0],
+          zoom: 3,
+        }),
+      })
 
-
-    var vectorSource = new ol.source.VectorTile({
+      var vectorSource = new ol.source.VectorTile({
         format: new ol.format.GeoJSON({
-            defaultDataProjection: new ol.proj.Projection({
-                code: 'TILE_PIXELS',
-                units: 'tile-pixels'
-            })
+          defaultDataProjection: new ol.proj.Projection({
+            code: 'TILE_PIXELS',
+            units: 'tile-pixels',
+          }),
         }),
         url: 'http://localhost:3000/gettile/{z}/{x}/{y}.vector',
-    });
+      })
 
-    var vectorLayer = new ol.layer.VectorTile({
-        source: vectorSource
-    });
-    map.addLayer(vectorLayer);
-    var select = new ol.interaction.Select({
+      var vectorLayer = new ol.layer.VectorTile({
+        source: vectorSource,
+      })
+      map.addLayer(vectorLayer)
+      var select = new ol.interaction.Select({
         condition: ol.events.condition.pointerMove,
         style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: '#ff0000',
-                width: 4
-            })
+          stroke: new ol.style.Stroke({
+            color: '#ff0000',
+            width: 4,
+          }),
         }),
-        layers: [vectorLayer]
-    })
-    map.addInteraction(select);
-
-
-</script>
-</body>
+        layers: [vectorLayer],
+      })
+      map.addInteraction(select)
+    </script>
+  </body>
 </html>
